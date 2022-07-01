@@ -1,25 +1,41 @@
-const canvas = document.getElementById('canvas');
-canvas.width = 200;
+const mainCanvas = document.getElementById('mainCanvas');
+mainCanvas.width = 200;
 
-const ctx = canvas.getContext('2d');
+const nnCanvas = document.getElementById('nnCanvas');
+nnCanvas.width = 300;
 
-const road = new Road(canvas.width / 2, canvas.width * 0.9)
-const car = new Car(road.getLaneCenter(1), 100, 30, 50);
+const mainCtx = mainCanvas.getContext('2d');
+const nnCtx = nnCanvas.getContext('2d');
+
+const road = new Road(mainCanvas.width / 2, mainCanvas.width * 0.9)
+const car = new Car(road.getLaneCenter(1), 100, 30, 50, "NN");
+const traffic = [
+    new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2)
+]
 
 animate();
 
-function animate() {
-    car.update(road.borders); // update car every frame
+function animate(time) {
+    for (let i = 0; i < traffic.length; i++) {
+        traffic[i].update(road.borders);
+    }
+    car.update(road.borders, traffic); // update car every frame
 
-    canvas.height = window.innerHeight; //resizes vertically every frame
+    mainCanvas.height = window.innerHeight; //resizes vertically every frame
+    nnCanvas.height = window.innerHeight;
 
-    ctx.save();
-    ctx.translate(0, -car.y + canvas.height * 0.8);
+    mainCtx.save();
+    mainCtx.translate(0, -car.y + mainCanvas.height * 0.8);
 
-    road.draw(ctx);
-    car.draw(ctx); // draws the car
+    road.draw(mainCtx);
+    for (let i = 0; i < traffic.length; i++) {
+        traffic[i].draw(mainCtx, 'red');
+    }
+    car.draw(mainCtx, 'blue'); // draws the car
 
-    ctx.restore();
+    mainCtx.restore();
 
+    nnCtx.lineDashOffset = -time / 50;
+    Visualizer.drawNetwork(nnCtx, car.brain);
     requestAnimationFrame(animate); // makes animation
 }

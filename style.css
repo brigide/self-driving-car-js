@@ -1,10 +1,14 @@
 body {
     margin: 0;
-    background: darkgray;
+    background: #FF37ED;
     overflow: hidden;
     text-align: center;
 }
 
-#canvas {
+#mainCanvas {
     background: lightgray;
+}
+
+#nnCanvas {
+    background: black;
 }

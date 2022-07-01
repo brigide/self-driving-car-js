@@ -27,9 +27,9 @@ class Road {
             Math.min(laneIndex, this.laneCount - 1) * lineWidth;
     }
 
-    draw(ctx) {
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = 'white';
+    draw(mainCtx) {
+        mainCtx.lineWidth = 5;
+        mainCtx.strokeStyle = 'white';
 
         for (let i = 0; i <= this.laneCount - 1; i++) {
             const x = lerp(
@@ -38,20 +38,20 @@ class Road {
                 i / this.laneCount
             );
 
-            ctx.setLineDash([20, 20]);
+            mainCtx.setLineDash([20, 20]);
 
-            ctx.beginPath();
-            ctx.moveTo(x, this.top);
-            ctx.lineTo(x, this.bottom);
-            ctx.stroke();
+            mainCtx.beginPath();
+            mainCtx.moveTo(x, this.top);
+            mainCtx.lineTo(x, this.bottom);
+            mainCtx.stroke();
         }
 
-        ctx.setLineDash([]);
+        mainCtx.setLineDash([]);
         this.borders.forEach(border => {
-            ctx.beginPath();
-            ctx.moveTo(border[0].x, border[0].y);
-            ctx.lineTo(border[1].x, border[1].y);
-            ctx.stroke();
+            mainCtx.beginPath();
+            mainCtx.moveTo(border[0].x, border[0].y);
+            mainCtx.lineTo(border[1].x, border[1].y);
+            mainCtx.stroke();
         })
     }
 }
